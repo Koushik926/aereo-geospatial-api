@@ -5,7 +5,7 @@ import zipfile
 from pathlib import Path
 
 import fiona
-from shapely.geometry import Point, LineString, Polygon, mapping
+from shapely.geometry import Polygon, mapping
 
 
 def create_polygon_shapefile_zip() -> Path:
@@ -13,8 +13,15 @@ def create_polygon_shapefile_zip() -> Path:
     tmp_dir = Path(tempfile.mkdtemp())
     shp_path = tmp_dir / "polygons.shp"
     schema = {"geometry": "Polygon", "properties": {"name": "str"}}
-    with fiona.open(str(shp_path), "w", driver="ESRI Shapefile", schema=schema, crs="EPSG:4326") as dst:
-        dst.write({"geometry": mapping(Polygon([(0, 0), (1, 0), (1, 1), (0, 1)])), "properties": {"name": "poly1"}})
+    with fiona.open(
+        str(shp_path), "w", driver="ESRI Shapefile", schema=schema, crs="EPSG:4326"
+    ) as dst:
+        dst.write(
+            {
+                "geometry": mapping(Polygon([(0, 0), (1, 0), (1, 1), (0, 1)])),
+                "properties": {"name": "poly1"},
+            }
+        )
 
     zip_path = tmp_dir / "test.zip"
     with zipfile.ZipFile(str(zip_path), "w") as zf:

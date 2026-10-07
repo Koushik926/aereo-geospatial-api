@@ -17,7 +17,9 @@ class UploadedFile(Base):
     status = Column(String, default="COMPLETED")
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
-    measurements = relationship("FeatureMeasurement", back_populates="file", cascade="all, delete-orphan")
+    measurements = relationship(
+        "FeatureMeasurement", back_populates="file", cascade="all, delete-orphan"
+    )
 
 
 class FeatureMeasurement(Base):

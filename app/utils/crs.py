@@ -1,7 +1,7 @@
 """CRS utilities — select projected CRS and transform geometries."""
 
 from pyproj import CRS, Transformer
-from typing import Tuple, Optional
+from typing import Optional
 
 
 def select_projected_crs(longitude: float, latitude: float) -> str:
@@ -14,7 +14,9 @@ def select_projected_crs(longitude: float, latitude: float) -> str:
 
 
 def get_transformer(src_crs: str, dst_crs: str) -> Transformer:
-    return Transformer.from_crs(CRS.from_user_input(src_crs), CRS.from_user_input(dst_crs), always_xy=True)
+    return Transformer.from_crs(
+        CRS.from_user_input(src_crs), CRS.from_user_input(dst_crs), always_xy=True
+    )
 
 
 def normalize_crs(crs_input) -> Optional[str]:

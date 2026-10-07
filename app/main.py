@@ -1,13 +1,11 @@
 """Aereo Geospatial File Measurement API."""
 
-import json
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.db.base import Base, engine
-from app.db.models import UploadedFile, FeatureMeasurement
 from app.routes.files import router as files_router
 from app.middleware.logging_middleware import LoggingMiddleware
 from app.utils.logging import setup_logging
@@ -30,7 +28,9 @@ app = FastAPI(
 )
 
 app.add_middleware(LoggingMiddleware)
-app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(
+    CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"]
+)
 app.include_router(files_router)
 
 

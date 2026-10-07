@@ -1,6 +1,5 @@
 """Measurement endpoint tests."""
 
-from pathlib import Path
 from tests.fixtures.shapefile import create_polygon_shapefile_zip
 from fastapi.testclient import TestClient
 from app.main import app
@@ -11,7 +10,9 @@ client = TestClient(app)
 def test_get_file_info():
     zip_path = create_polygon_shapefile_zip()
     with open(zip_path, "rb") as f:
-        upload_resp = client.post("/api/files/", files={"file": ("test.zip", f, "application/zip")})
+        upload_resp = client.post(
+            "/api/files/", files={"file": ("test.zip", f, "application/zip")}
+        )
     file_id = upload_resp.json()["id"]
 
     response = client.get(f"/api/files/{file_id}/")
@@ -30,7 +31,9 @@ def test_get_file_info_not_found():
 def test_get_measurements():
     zip_path = create_polygon_shapefile_zip()
     with open(zip_path, "rb") as f:
-        upload_resp = client.post("/api/files/", files={"file": ("test.zip", f, "application/zip")})
+        upload_resp = client.post(
+            "/api/files/", files={"file": ("test.zip", f, "application/zip")}
+        )
     file_id = upload_resp.json()["id"]
 
     response = client.get(f"/api/files/{file_id}/measurements/")
@@ -38,7 +41,9 @@ def test_get_measurements():
     data = response.json()
     assert data["total_features"] == 1
 
-    poly = next((m for m in data["measurements"] if m["geometry_type"] == "Polygon"), None)
+    poly = next(
+        (m for m in data["measurements"] if m["geometry_type"] == "Polygon"), None
+    )
     assert poly is not None
     assert poly["measurement_type"] == "area"
     assert poly["measurement_value"] is not None
@@ -48,7 +53,9 @@ def test_get_measurements():
 def test_get_summary():
     zip_path = create_polygon_shapefile_zip()
     with open(zip_path, "rb") as f:
-        upload_resp = client.post("/api/files/", files={"file": ("test.zip", f, "application/zip")})
+        upload_resp = client.post(
+            "/api/files/", files={"file": ("test.zip", f, "application/zip")}
+        )
     file_id = upload_resp.json()["id"]
 
     response = client.get(f"/api/files/{file_id}/summary/")

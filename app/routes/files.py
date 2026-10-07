@@ -107,16 +107,7 @@ async def get_measurements(file_id: str, db: Session = Depends(get_db)):
     db_m = (
         db.query(FeatureMeasurement).filter(FeatureMeasurement.file_id == file_id).all()
     )
-    measurements = [
-        MeasurementResponse(
-            feature_index=m.feature_index,
-            geometry_type=m.geometry_type,
-            measurement_type=m.measurement_type,
-            measurement_value=m.measurement_value,
-            unit=m.unit,
-        )
-        for m in db_m
-    ]
+    measurements = [MeasurementResponse.model_validate(m) for m in db_m]
     return MeasurementsResponse(
         file_id=file_id, total_features=len(measurements), measurements=measurements
     )

@@ -5,6 +5,7 @@ from pydantic import BaseModel, ConfigDict
 
 
 class MeasurementResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
     feature_index: int
     geometry_type: str
     measurement_type: Optional[str] = None

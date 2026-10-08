@@ -1,6 +1,6 @@
 """Core file processing — parses shapefiles and KML, computes measurements."""
 
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as DefusedET
 import uuid
 from pathlib import Path
 from typing import Tuple
@@ -77,7 +77,7 @@ def _parse_kml_coordinates(coords_str: str):
 
 def _kml_to_features(file_path: Path) -> list:
     """Parse KML with ElementTree + shapely."""
-    tree = ET.parse(str(file_path))
+    tree = DefusedET.parse(str(file_path))
     root = tree.getroot()
     features = []
     for pm in root.findall(".//kml:Placemark", KML_NS):
